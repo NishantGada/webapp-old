@@ -1,17 +1,16 @@
 import express from 'express';
-import { createServer } from 'http';
 import initialize from './app.js';
 import { sequelize } from './config/dbconfig.js';
 
 const app = express();
-const port = 3000;
-const server = createServer(app);
-// server.listen(port);
+const port = process.env.PORT;
 
 initialize(app);
-app.listen(port, () => {
-	console.log(`Server is listening at http://localhost:${port}`);
-});
+app.listen(port);
 
-console.log("server.js before db authentication");
-sequelize.authenticate();
+try {
+    await sequelize.authenticate();
+    console.log('Connection has been established successfully.');
+} catch (error) {
+    console.error('Unable to connect to the database:', error);
+}
