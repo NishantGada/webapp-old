@@ -19,7 +19,9 @@ export const get = async (req, res) => {
     try {
         console.log("healthz-get try block");
         // sample query to test DB connection
-        await sequelize.query('SELECT 1+1 as Result');
+        // await sequelize.query('SELECT 1+1 as Result');
+        const results = await sequelize.query('SELECT * FROM public."Test"');
+        console.log("results: ", results);
         return res.status(200).json()
     } catch (err) {
         console.log("healthz-get catch block: ", err);
