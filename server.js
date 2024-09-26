@@ -1,21 +1,17 @@
-const http = require('http')
-const app = require('./app')
+import express from 'express';
+import { createServer } from 'http';
+import initialize from './app.js';
+import { sequelize } from './config/dbconfig.js';
 
-const port = process.env.port || 3000;
-const server = http.createServer(app);
-server.listen(port);
+const app = express();
+const port = 3000;
+const server = createServer(app);
+// server.listen(port);
 
-const { Sequelize } = require('sequelize');
-const sequelize = new Sequelize('Cloud', 'root', 'gokuhinata1111', {
-    host: 'localhost',
-    dialect: 'mysql'
+initialize(app);
+app.listen(port, () => {
+	console.log(`Server is listening at http://localhost:${port}`);
 });
 
-try {
-    sequelize.authenticate()
-    console.log('Connection has been established successfully.');
-} catch (error) {
-    console.error('Unable to connect to the database:', error);
-}
-
-// module.exports = router;
+console.log("server.js before db authentication");
+sequelize.authenticate();
