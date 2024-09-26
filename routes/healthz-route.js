@@ -10,7 +10,7 @@ router.get('/healthz', (req, res) => {
 
 // Middleware logic to disallow URL parameters
 router.use('/healthz/:param', (req, res) => {
-    res.status(400).json({ message: "URL parameters are not allowed" });
+    res.status(400).json();
 });
 
 // Used to catch all for unsupported methods
