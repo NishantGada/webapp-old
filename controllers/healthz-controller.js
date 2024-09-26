@@ -23,7 +23,7 @@ export const get = async (req, res) => {
         return res.status(200).json()
     } catch (err) {
         console.log("healthz-get catch block: ", err);
-        // 503 Status code would mean DB connection is unnsuccessful
+        // 503 Status code would mean DB connection failed
         return res.status(503).json()
     }
 }

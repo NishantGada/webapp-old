@@ -4,7 +4,6 @@ import * as healthzController from '../controllers/healthz-controller.js';
 const router = express.Router();
 
 router.get('/healthz', (req, res) => {
-    // If no query parameters, call the controller function
     healthzController.get(req, res);
 });
 
