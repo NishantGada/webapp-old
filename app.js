@@ -1,9 +1,11 @@
-const express = require('express')
-const app = express()
+import express from 'express';
+import registerRouter from './routes/index.js';
 
-app.use(express.urlencoded({ extended: true }));
+const initialize = (app) => {
+    app.use(express.json());
+    
+    // Initialize routes
+    registerRouter(app);
+};
 
-healthRoute = require('./routes/healthz')
-app.use('/', healthRoute);
-
-module.exports = app;
+export default initialize;
