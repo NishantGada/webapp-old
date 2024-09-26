@@ -76,6 +76,8 @@ To deploy the application:
 - **Response**:
   - **200 OK**: If the connection to the database is successful.
   - **503 Service Unavailable**: If the connection to the database fails.
+  - **400 Bad Request**: If the request has a body or there are URL params present.
+  - **405 Method Not Allowed**: If the method is any method other than GET
 
 ### Restrictions:
 - Only `GET` requests are allowed.
