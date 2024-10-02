@@ -3,6 +3,23 @@ import * as userController from '../controllers/user-controller.js';
 
 const router = express.Router();
 
+router.use('/self', (req, res, next) => {
+    // Disallow any query parameters or URL parameters
+    if (Object.keys(req.query).length > 0 || Object.keys(req.params).length > 0) {
+        return res.status(400).json({ message: "Query / URL params NOT allowed" });
+    }
+    next();
+});
+
+router.use('/', (req, res, next) => {
+    // Disallow any query parameters or URL parameters
+    if (Object.keys(req.query).length > 0 || Object.keys(req.params).length > 0) {
+        return res.status(400).json({ message: "Query / URL params NOT allowed" });
+    }
+    next();
+});
+
+
 // Controller mappings for respective APIs
 router.route("/self")
     .get(userController.getUserDetails)
