@@ -5,7 +5,7 @@ const router = express.Router();
 
 // Controller mappings for respective APIs
 router.route("/self")
-    .get(userController.getAllUsers)
+    .get(userController.getUserDetails)
     .put(userController.updateUserDetails)
     .head(userController.handleHeadMethod)
 
