@@ -29,8 +29,14 @@ const checkValidUser = async (req, res) => {
 
 export const getUserDetails = async (req, res) => {
     try {
+        // condition to check if any response body is present or not
+        if (req.headers['content-length'] !== undefined) {
+            return res.status(400).json()
+        }
         const [user, valid] = await checkValidUser(req, res);
 
+        res.set('Cache-Control', 'no-cache');
+        
         if (valid) {
             return res.status(200).json(user);
         } else {
@@ -46,6 +52,7 @@ export const getUserDetails = async (req, res) => {
 export const createNewUser = async (req, res) => {
     console.log("Inside createNewUser API");
     const { firstName, lastName, email, password } = req.body;
+    res.set('Cache-Control', 'no-cache');
 
     // Validate input data
     if (!firstName || !lastName || !email || !password) {
@@ -83,6 +90,7 @@ export const createNewUser = async (req, res) => {
 
 export const updateUserDetails = async (req, res) => {
     try {
+        res.set('Cache-Control', 'no-cache');
         if (req.body.accountCreated || req.body.accountUpdated || req.body.email) {
             return res.status(400).json()
         }
