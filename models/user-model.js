@@ -30,10 +30,7 @@ const User = sequelize.define('User', {
 }, {
     timestamps: true,  // Automatically adds createdAt and updatedAt fields
     createdAt: 'accountCreated',
-    updatedAt: 'accountUpdated',
-    defaultScope: {
-        attributes: { exclude: ['password'] }  // Exclude 'password' by default in all queries
-    }
+    updatedAt: 'accountUpdated'
 });
 
 export default User;
