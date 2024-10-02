@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import { sequelize } from '../config/dbconfig.js';  // Assuming dbconfig.js exports a configured Sequelize instance
+import { sequelize } from '../config/dbconfig.js';
 
 const User = sequelize.define('User', {
     id: {
@@ -28,7 +28,7 @@ const User = sequelize.define('User', {
         allowNull: false
     }
 }, {
-    timestamps: true,  // Automatically adds createdAt and updatedAt fields
+    timestamps: true,
     createdAt: 'accountCreated',
     updatedAt: 'accountUpdated'
 });
