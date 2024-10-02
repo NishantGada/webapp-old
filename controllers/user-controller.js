@@ -27,7 +27,7 @@ const checkValidUser = async (req, res) => {
     }
 }
 
-export const getAllUsers = async (req, res) => {
+export const getUserDetails = async (req, res) => {
     try {
         const [user, valid] = await checkValidUser(req, res);
 
@@ -42,20 +42,21 @@ export const getAllUsers = async (req, res) => {
     }
 };
 
+
 export const createNewUser = async (req, res) => {
     console.log("Inside createNewUser API");
     const { firstName, lastName, email, password } = req.body;
 
     // Validate input data
     if (!firstName || !lastName || !email || !password) {
-        return res.status(400).json({ message: "All fields are required" });
+        return res.status(400).json();
     }
 
     try {
         // Check if the user already exists
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) {
-            return res.status(400).json({ message: "User already exists" });
+            return res.status(400).json();
         }
 
         // Hash the password
@@ -74,82 +75,10 @@ export const createNewUser = async (req, res) => {
         const { password: _, ...userWithoutPassword } = newUser.toJSON();
         return res.status(201).json(userWithoutPassword);
     } catch (error) {
-        console.error("Error creating user:", error);
-        return res.status(500).json({ message: "Internal Server Error" });
+        console.error("Error creating user: ", error);
+        return res.status(400).json();
     }
 };
-
-/*
-export const updateUserDetails = async (req, res) => {
-    console.log("Inside updateUserDetails");
-    try {
-        const requestUsername = req.body.email // username == email
-        console.log("requestUsername: ", requestUsername);
-
-        console.log("Update req body: ", req.body);
-
-        await User.update(
-            req.body,
-            {
-                where: {
-                    email: req.body.email,
-                },
-            },
-        );
-
-        return res.status(200).json();
-    } catch (err) {
-        console.log("err: ", err);
-    }
-}
-*/
-
-
-/*
-export const updateUserDetails = async (req, res) => {
-    console.log("Inside updateUserDetails");
-    try {
-        const [username, password] = validateBasicAuth(req, res);
-        const requestUsername = req.body.email; // username == email
-        console.log("requestUsername: ", requestUsername);
-
-        if (req.body.accountCreated || req.body.accountUpdated) {
-            return res.status(400).json()
-        }
-
-        req.body.password = await encryptPassword(req.body.password);
-
-        // Perform the update
-        const [affectedRows] = await User.update(
-            req.body,
-            {
-                where: {
-                    email: req.body.email,
-                },
-            },
-        );
-
-        console.log("affectedRows: ", affectedRows);
-
-        // Check if the update was successful (affectedRows > 0)
-        if (affectedRows === 0) {
-            return res.status(404).json({ message: "User not found or no updates applied" });
-        }
-
-        // Fetch the updated user data (without password)
-        const updatedUser = await User.findOne({
-            where: { email: req.body.email },
-            attributes: { exclude: ['password'] } // Exclude the password field from the response
-        });
-
-        // Return the updated user data
-        return res.status(200).json(updatedUser);
-    } catch (err) {
-        console.error("Error updating user details:", err);
-        return res.status(500).json({ message: "Internal Server Error" });
-    }
-};
-*/
 
 
 export const updateUserDetails = async (req, res) => {
@@ -170,7 +99,7 @@ export const updateUserDetails = async (req, res) => {
 
             req.body.password = newPassword;
 
-            console.log("before update: ", req.body);
+            // console.log("before update: ", req.body);
             const [affectedRows] = await User.update(
                 req.body,
                 {
@@ -180,12 +109,6 @@ export const updateUserDetails = async (req, res) => {
                 },
             );
 
-            // Check if the update was successful (affectedRows > 0)
-            if (affectedRows === 0) {
-                // return res.status(404).json({ message: "User not found or no updates applied" });
-                console.log("No rows affected");
-            }
-
             // Fetch the updated user data (without password)
             let updatedUser = await User.findOne({
                 where: {
@@ -194,17 +117,17 @@ export const updateUserDetails = async (req, res) => {
             });
 
             updatedUser = updatedUser.toJSON();
-            console.log("updatedUser: ", updatedUser);
+            // console.log("updatedUser: ", updatedUser);
             const { password, ...userWithoutPassword } = user;
-            console.log("userWithoutPassword: ", userWithoutPassword);
+            // console.log("userWithoutPassword: ", userWithoutPassword);
 
             return res.status(204).json();
         } else {
-            return res.status(400).json({ message: "Error: Try checking authentication parameters" });
+            return res.status(400).json();
         }
     } catch (error) {
         console.log("err: ", error);
-        return res.status(400).json({ message: "Something went wrong…" })
+        return res.status(400).json();
     }
 }
 
