@@ -97,7 +97,8 @@ To deploy the application:
 
 ### PUT `/v1/user/self`
 
-- **Description**: This endpoint allows you to create a NEW user.
+- **Description**: This endpoint allows you to update the details of a specific user.
+- **Permitted Fields**: First Name, Last Name, & Password.
 - **Response**:
   - **204 No Content**: If the was created and stored in the DB successfully.
   - **400 Bad Request**: If any request parameter is missing, unexpected, Basic Authorization fails due to any reason, or if the user already exists.
