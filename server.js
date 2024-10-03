@@ -11,13 +11,13 @@ app.listen(port);
 try {
     // logic to test DB connection on start
     await sequelize.authenticate();
-    console.log('Connection has been established successfully.');
+    console.log('Connection has been established successfully…');
 } catch (error) {
-    console.error('Unable to connect to the database:', error);
+    console.error('Unable to connect to the database: ', error);
 }
 
 sequelize.sync()
     .then(() => {
-        console.log('User table has been successfully created');
+        console.log('User table has been successfully created…');
     })
-    .catch(error => console.log('This error occurred:', error));
+    .catch(error => console.log('error:', error));
