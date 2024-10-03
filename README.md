@@ -1,6 +1,6 @@
-# Healthz API
+# A02
 
-This is a simple `healthz` API that checks the connection to a PostgreSQL database. If the database connection is successful, it returns a status code of `200`. Otherwise, it returns a status code of `503`. The API only allows `GET` requests, disallows URL parameters, and doesn't accept any request body.
+In this assignment I created APIs for a User. It included - Create, Read, and Update APIs. Apart from that I used "BCrypt" to hash the password and store in the DB and used "Basic-Auth" to implement authorization when an API is called.
 
 ## Prerequisites
 
@@ -9,6 +9,7 @@ Before building and running the application locally, ensure you have the followi
 - [Node.js](https://nodejs.org/en/download/)
 - [npm](https://www.npmjs.com/get-npm)
 - [PostgreSQL](https://www.postgresql.org/download/)
+- [BCrypt](https://www.npmjs.com/package/bcrypt)
 
 A `.env` file needs to be created with the following environment variables to configure the database connection:
 
@@ -79,3 +80,24 @@ To deploy the application:
   - **503 Service Unavailable**: If the connection to the database fails.
   - **400 Bad Request**: If the request has a body or there are URL params present.
   - **405 Method Not Allowed**: If the method is any method other than GET
+
+### GET `/v1/user/self`
+
+- **Description**: This endpoint fetches the details of a specific user.
+- **Response**:
+  - **200 OK**: If the details were fetched successfully.
+  - **400 Bad Request**: If the Basic Authorization fails due to any reason.
+
+### POST `/v1/user`
+
+- **Description**: This endpoint allows you to create a NEW user.
+- **Response**:
+  - **201 User Created**: If the was created and stored in the DB successfully.
+  - **400 Bad Request**: If any request parameter is missing, unexpected, or if the user already exists.
+
+### PUT `/v1/user/self`
+
+- **Description**: This endpoint allows you to create a NEW user.
+- **Response**:
+  - **201 User Created**: If the was created and stored in the DB successfully.
+  - **400 Bad Request**: If any request parameter is missing, unexpected, Basic Authorization fails due to any reason, or if the user already exists.
