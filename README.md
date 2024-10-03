@@ -99,5 +99,5 @@ To deploy the application:
 
 - **Description**: This endpoint allows you to create a NEW user.
 - **Response**:
-  - **201 User Created**: If the was created and stored in the DB successfully.
+  - **204 No Content**: If the was created and stored in the DB successfully.
   - **400 Bad Request**: If any request parameter is missing, unexpected, Basic Authorization fails due to any reason, or if the user already exists.
