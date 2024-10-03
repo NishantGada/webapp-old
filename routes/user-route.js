@@ -6,7 +6,8 @@ const router = express.Router();
 router.use('/self', (req, res, next) => {
     // Disallow any query parameters or URL parameters
     if (Object.keys(req.query).length > 0 || Object.keys(req.params).length > 0) {
-        return res.status(400).json({ message: "Query / URL params NOT allowed" });
+        console.log("Query / URL params NOT allowed");
+        return res.status(400).json();
     }
     next();
 });
@@ -14,7 +15,8 @@ router.use('/self', (req, res, next) => {
 router.use('/', (req, res, next) => {
     // Disallow any query parameters or URL parameters
     if (Object.keys(req.query).length > 0 || Object.keys(req.params).length > 0) {
-        return res.status(400).json({ message: "Query / URL params NOT allowed" });
+        console.log("Query / URL params NOT allowed");
+        return res.status(400).json();
     }
     next();
 });
