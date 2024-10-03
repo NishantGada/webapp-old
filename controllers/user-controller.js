@@ -3,7 +3,14 @@ import { validateBasicAuth } from '../utils/basicAuth.js';
 import { checkPassword, encryptPassword } from '../utils/hash.js';
 
 const checkValidUser = async (req, res) => {
-    const [basicUsername, basicPassword] = validateBasicAuth(req, res);
+    const [basicUsername, basicPassword, authSuccessful] = validateBasicAuth(req, res);
+
+    // "authSuccessful" checks whether Basic Authentication was successful or not
+    // False when username and / (or) password is missing
+    if (!authSuccessful) {
+        return [{}, false, authSuccessful];
+    }
+    
     let user = await User.findOne({
         where: {
             email: basicUsername,
@@ -13,7 +20,7 @@ const checkValidUser = async (req, res) => {
     // If user not found, return invalid response
     if (!user) {
         console.log("User not found…");
-        return [{}, false];
+        return [{}, false, true];
     }
 
     const validPassword = await checkPassword(basicPassword, user.password);
@@ -21,9 +28,9 @@ const checkValidUser = async (req, res) => {
     if (user.email === basicUsername && validPassword) {
         user = user.toJSON();
         const { password, ...userWithoutPassword } = user;
-        return [userWithoutPassword, true];
+        return [userWithoutPassword, true, true];
     } else {
-        return [{}, false];
+        return [{}, false, true];
     }
 }
 
@@ -33,18 +40,25 @@ export const getUserDetails = async (req, res) => {
         if (req.headers['content-length'] !== undefined) {
             return res.status(400).json()
         }
-        const [user, valid] = await checkValidUser(req, res);
+
+        const [user, valid, validAuth] = await checkValidUser(req, res);
+        if (!validAuth) {
+            console.log("Auth failed… Check Auth params");
+            return res.status(401).json();
+        }
 
         res.set('Cache-Control', 'no-cache');
         
+        // "valid" checks whether username and password match with the desired details
         if (valid) {
             return res.status(200).json(user);
         } else {
-            return res.status(400).json({ message: "Error: Try checking authentication parameters" });
+            console.log("Error: Try checking authentication parameters");
+            return res.status(400).json();
         }
     } catch (error) {
-        console.error('Error fetching user:', error);
-        return res.status(400).json({ message: "Error: Try checking authentication parameters" });
+        console.error('Error fetching user: ', error);
+        return res.status(400).json();
     }
 };
 
@@ -96,7 +110,12 @@ export const updateUserDetails = async (req, res) => {
         }
         console.log("req: ", req.body);
 
-        const [user, valid] = await checkValidUser(req, res);
+        const [user, valid, validAuth] = await checkValidUser(req, res);
+        if (!validAuth) {
+            console.log("Auth failed… Check Auth params");
+            return res.status(401).json();
+        }
+
         console.log("valid user? ", valid);
 
         if (valid) {
