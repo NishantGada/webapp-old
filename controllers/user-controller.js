@@ -2,7 +2,7 @@ import User from '../models/user-model.js';
 import { validateBasicAuth } from '../utils/basicAuth.js';
 import { checkPassword, encryptPassword } from '../utils/hash.js';
 
-const checkValidUser = async (req, res) => {
+export const checkValidUser = async (req, res) => {
     const [basicUsername, basicPassword, authSuccessful] = validateBasicAuth(req, res);
 
     // "authSuccessful" checks whether Basic Authentication was successful or not
@@ -10,7 +10,7 @@ const checkValidUser = async (req, res) => {
     if (!authSuccessful) {
         return [{}, false, authSuccessful];
     }
-    
+
     let user = await User.findOne({
         where: {
             email: basicUsername,
@@ -48,7 +48,7 @@ export const getUserDetails = async (req, res) => {
         }
 
         res.set('Cache-Control', 'no-cache');
-        
+
         // "valid" checks whether username and password match with the desired details
         if (valid) {
             return res.status(200).json(user);
@@ -105,9 +105,17 @@ export const createNewUser = async (req, res) => {
 export const updateUserDetails = async (req, res) => {
     try {
         res.set('Cache-Control', 'no-cache');
-        if (req.body.accountCreated || req.body.accountUpdated || req.body.email) {
+        if (req.body.accountCreated || req.body.accountUpdated) {
+            console.log("invalid req param");
             return res.status(400).json()
         }
+
+        const { firstName, lastName, email, password } = req.body;
+        if (!firstName || !lastName || !email || !password) {
+            console.log("missing req param");
+            return res.status(400).json();
+        }
+
         console.log("req: ", req.body);
 
         const [user, valid, validAuth] = await checkValidUser(req, res);
@@ -120,15 +128,13 @@ export const updateUserDetails = async (req, res) => {
 
         if (valid) {
             console.log("user: ", user);
-
             const newPassword = await encryptPassword(req.body.password);
-            console.log("newPassword: ", newPassword);
 
             req.body.password = newPassword;
+            const { email, ...userWithoutEmail } = req.body;
 
-            // console.log("before update: ", req.body);
             const [affectedRows] = await User.update(
-                req.body,
+                userWithoutEmail,
                 {
                     where: {
                         email: user.email,
