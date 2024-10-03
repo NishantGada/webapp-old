@@ -65,6 +65,9 @@ export const getUserDetails = async (req, res) => {
 
 export const createNewUser = async (req, res) => {
     console.log("Inside createNewUser API");
+
+    console.log("createNewUser req.body: ", req.body);
+
     const { firstName, lastName, email, password } = req.body;
     res.set('Cache-Control', 'no-cache');
 
@@ -77,6 +80,7 @@ export const createNewUser = async (req, res) => {
         // Check if the user already exists
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) {
+            console.log("User already exists…");
             return res.status(400).json();
         }
 
