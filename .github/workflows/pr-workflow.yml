@@ -37,3 +37,9 @@ jobs:
 
       - name: Run tests
         run: npm test
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_DBNAME: ${{ secrets.DB_DBNAME }}
+          DB_DIALECT: ${{ secrets.DB_DIALECT }}
