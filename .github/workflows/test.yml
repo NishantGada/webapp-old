@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  terraform:
+  test_webapp:
     name: Initiating Webapp Checks…
     runs-on: ubuntu-latest
 
