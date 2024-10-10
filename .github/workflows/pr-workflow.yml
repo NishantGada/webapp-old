@@ -1,0 +1,69 @@
+name: Webapp PR workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Webapp PR Workflow
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_DB: ${{ secrets.DB_DBNAME }}
+          POSTGRES_USER: ${{ secrets.DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASS }}
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.9.0'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Starting server
+        run: node server.js
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_DBNAME: ${{ secrets.DB_DBNAME }}
+          DB_DIALECT: "postgres"
+
+      - name: Setting up PostgreSQL
+        run: |
+          echo "Setting up PostgreSQL environment variables..."
+          echo "DB_USER = ${{ secrets.DB_USER }}"
+          echo "DB_HOST = ${{ secrets.DB_HOST }}"
+          echo "DB_DBNAME = ${{ secrets.DB_DBNAME }}"
+          echo "DB_DIALECT = postgres"
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_DBNAME: ${{ secrets.DB_DBNAME }}
+          DB_DIALECT: "postgres"
+
+      - name: Run tests
+        run: npm test
+        env:
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_DBNAME: ${{ secrets.DB_DBNAME }}
+          DB_DIALECT: "postgres"
