@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  test_webapp:
+  test_webapp_workflow:
     name: Initiating Webapp Checks…
     runs-on: ubuntu-latest
 
