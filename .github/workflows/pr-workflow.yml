@@ -10,20 +10,6 @@ jobs:
     name: Webapp PR Workflow
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:14
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_DB: ${{ secrets.DB_DBNAME }}
-          POSTGRES_USER: ${{ secrets.DB_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.DB_PASS }}
-        options: >-
-          --health-cmd="pg_isready"
-          --health-interval=10s
-          --health-timeout=5s
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -32,6 +18,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '22.9.0'
+      
+      - name: Install PostgreSQL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql postgresql-contrib
+
+      - name: Start PostgreSQL service
+        run: |
+          sudo service postgresql start
+          sudo -u postgres psql -c "ALTER USER postgres PASSWORD '${{ secrets.DB_PASS }}';"
+          sudo -u postgres psql -c "CREATE DATABASE ${{ secrets.DB_DBNAME }};"
 
       - name: Install dependencies
         run: npm install
@@ -50,6 +47,7 @@ jobs:
           echo "Setting up PostgreSQL environment variables..."
           echo "DB_USER = ${{ secrets.DB_USER }}"
           echo "DB_HOST = ${{ secrets.DB_HOST }}"
+          DB_PASS: ${{ secrets.DB_PASS }}
           echo "DB_DBNAME = ${{ secrets.DB_DBNAME }}"
           echo "DB_DIALECT = postgres"
         env:
