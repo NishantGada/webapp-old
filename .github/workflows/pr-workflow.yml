@@ -28,13 +28,13 @@ jobs:
           echo "DB_USER = ${{ secrets.DB_USER }}"
           echo "DB_HOST = ${{ secrets.DB_HOST }}"
           echo "DB_DBNAME = ${{ secrets.DB_DBNAME }}"
-          echo "DB_DIALECT = ${{ secrets.DB_DIALECT }}"
+          echo "DB_DIALECT = postgres"
         env:
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASS: ${{ secrets.DB_PASS }}
           DB_DBNAME: ${{ secrets.DB_DBNAME }}
-          DB_DIALECT: ${{ secrets.DB_DIALECT }}
+          DB_DIALECT: "postgres"
 
       - name: Starting server
         run: node server.js
@@ -43,7 +43,7 @@ jobs:
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASS: ${{ secrets.DB_PASS }}
           DB_DBNAME: ${{ secrets.DB_DBNAME }}
-          DB_DIALECT: ${{ secrets.DB_DIALECT }}
+          DB_DIALECT: "postgres"
 
       - name: Run tests
         run: npm test
@@ -52,4 +52,4 @@ jobs:
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASS: ${{ secrets.DB_PASS }}
           DB_DBNAME: ${{ secrets.DB_DBNAME }}
-          DB_DIALECT: ${{ secrets.DB_DIALECT }}
+          DB_DIALECT: "postgres"
