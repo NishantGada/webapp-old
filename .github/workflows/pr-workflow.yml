@@ -28,7 +28,7 @@ jobs:
         run: |
           sudo service postgresql start
           sudo -u postgres psql -c "ALTER USER postgres PASSWORD '${{ secrets.DB_PASS }}';"
-          sudo -u postgres psql -c "CREATE DATABASE ${DB_DBNAME};"
+          sudo -u postgres psql -c "CREATE DATABASE ${{ secrets.DB_DBNAME }};"
 
       - name: Install dependencies
         run: npm install
