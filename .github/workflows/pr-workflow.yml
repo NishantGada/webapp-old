@@ -36,13 +36,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Setting up PostgreSQL
-        run: |
-          echo "Setting up PostgreSQL environment variables..."
-          echo "DB_USER = ${{ secrets.DB_USER }}"
-          echo "DB_HOST = ${{ secrets.DB_HOST }}"
-          echo "DB_DBNAME = ${{ secrets.DB_DBNAME }}"
-          echo "DB_DIALECT = postgres"
+      - name: Starting server
+        run: node server.js
         env:
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_USER: ${{ secrets.DB_USER }}
@@ -50,8 +45,13 @@ jobs:
           DB_DBNAME: ${{ secrets.DB_DBNAME }}
           DB_DIALECT: "postgres"
 
-      - name: Starting server
-        run: node server.js
+      - name: Setting up PostgreSQL
+        run: |
+          echo "Setting up PostgreSQL environment variables..."
+          echo "DB_USER = ${{ secrets.DB_USER }}"
+          echo "DB_HOST = ${{ secrets.DB_HOST }}"
+          echo "DB_DBNAME = ${{ secrets.DB_DBNAME }}"
+          echo "DB_DIALECT = postgres"
         env:
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_USER: ${{ secrets.DB_USER }}
