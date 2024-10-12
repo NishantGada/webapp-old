@@ -27,6 +27,7 @@ jobs:
       - name: Start PostgreSQL service
         run: |
           sudo service postgresql start
+          echo secrets: ${{ secrets }}
           sudo -u postgres psql -c "ALTER USER postgres PASSWORD '${{ secrets.DB_PASS }}';"
           sudo -u postgres psql -c "CREATE DATABASE ${{ secrets.DB_DBNAME }};"
 
