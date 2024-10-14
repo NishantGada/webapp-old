@@ -19,7 +19,7 @@ DB_USER=<your_postgre_user>
 DB_PASS=<your_postgre_password>
 DB_DBNAME=<your_database_name>
 DB_DIALECT=<your_database_dialect>
-```
+```  
 
 ## Installation
 
