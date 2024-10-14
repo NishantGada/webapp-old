@@ -1,4 +1,4 @@
-# A02
+# A03
 
 In this assignment I created APIs for a User. It included - Create, Read, and Update APIs. Apart from that I used "BCrypt" to hash the password and store in the DB and used "Basic-Auth" to implement authorization when an API is called.
 
