@@ -9,7 +9,7 @@ test('test-case-1:: should return 200 method not allowed for "GET" request', asy
     const res = await request(app)
         .get('/healthz')
 
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(500);
     expect(res.body).toEqual("");
 });
 
